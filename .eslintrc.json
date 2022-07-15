@@ -1,0 +1,47 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:import/recommended",
+    "plugin:import/typescript",
+    "prettier"
+  ],
+  "plugins": ["unicorn"],
+  "rules": {
+    "sort-imports": [
+      "error",
+      {
+        "ignoreDeclarationSort": true
+      }
+    ],
+    "import/order": [
+      "error",
+      {
+        "alphabetize": { "order": "asc" }
+      }
+    ],
+    "@typescript-eslint/explicit-function-return-type": "error",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/promise-function-async": "off",
+    "@typescript-eslint/sort-type-union-intersection-members": "error",
+    "unicorn/no-instanceof-array": "error",
+    "unicorn/prefer-array-find": "error",
+    "unicorn/prefer-array-flat": "error",
+    "unicorn/prefer-array-flat-map": "error",
+    "unicorn/prefer-array-index-of": "error",
+    "unicorn/prefer-array-some": "error",
+    "unicorn/prefer-at": "error",
+    "unicorn/prefer-date-now": "error",
+    "unicorn/prefer-includes": "error",
+    "unicorn/prefer-negative-index": "error",
+    "unicorn/prefer-object-from-entries": "error",
+    "unicorn/prefer-object-has-own": "error",
+    "unicorn/prefer-regexp-test": "error",
+    "unicorn/prefer-string-slice": "error"
+  },
+  "settings": {
+    "react": { "version": "detect" }
+  }
+}
