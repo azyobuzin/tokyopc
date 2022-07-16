@@ -13,14 +13,16 @@ export function calcPolarCoordinates(location: Coordinate): string {
       Math.sin(y1) * Math.sin(y2) +
         Math.cos(y1) * Math.cos(y2) * Math.cos(deltaX)
     );
-  const phi = d===0 ? 0 :
-    (-Math.atan2(
-      Math.sin(deltaX),
-      Math.cos(y1) * Math.tan(y2) - Math.sin(y1) * Math.cos(deltaX)
-    ) *
-      180) /
-      Math.PI +
-    90;
+  const phi =
+    d === 0
+      ? 0
+      : (-Math.atan2(
+          Math.sin(deltaX),
+          Math.cos(y1) * Math.tan(y2) - Math.sin(y1) * Math.cos(deltaX)
+        ) *
+          180) /
+          Math.PI +
+        90;
   return `(${distanceFormat.format(d)}, ${degreeFormat.format(phi)}°)`;
 }
 

@@ -13,6 +13,7 @@
   "dependencies": {
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
+    "@googlemaps/js-api-loader": "^1.14.3",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.4",
     "@reduxjs/toolkit": "^1.8.3",
@@ -25,6 +26,7 @@
     "rxjs": "^7.5.6"
   },
   "devDependencies": {
+    "@types/google.maps": "^3.49.2",
     "@types/react": "17",
     "@types/react-dom": "17",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
