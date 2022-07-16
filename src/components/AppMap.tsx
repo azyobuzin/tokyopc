@@ -83,6 +83,8 @@ const AppMap: FC = () => {
         const center = map.getView().getCenter();
         if (center) dispatch(setCenterCoordinates(center));
       });
+
+      dispatch(setCenterCoordinates(IMPERIAL_COORDINATES));
     },
     [dispatch]
   );

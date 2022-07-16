@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { selectAddress, selectPolarCoordinates } from "../store";
 import classes from "./App.module.css";
 import AppMap from "./AppMap";
+import TweetButton from "./TweetButton";
 
 const App: FC = () => {
   return (
@@ -41,9 +42,7 @@ const Footer: FC = () => {
         </Typography>
       </Box>
       <Box margin={2}>
-        <Button variant="contained" disabled={address == null}>
-          ツイート
-        </Button>
+        <TweetButton polarCoordinates={polarCoordinates} address={address} />
       </Box>
     </Box>
   );
