@@ -1,2 +1,4 @@
+import type { Coordinate } from "ol/coordinate";
+
 // 皇居の座標
-export const TOKYO_CENTER = { lat: 35.6825, lng: 139.752778 } as const;
+export const IMPERIAL_COORDINATES: Coordinate = [139.752778, 35.6825];
