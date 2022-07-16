@@ -17,6 +17,8 @@ jobs:
           cache: npm
       - run: npm install --production=false
       - run: npm run build
+        env:
+          VITE_GOOGLE_API_KEY: ${{ secrets.VITE_GOOGLE_API_KEY }}
       - uses: peaceiris/actions-gh-pages@v3
         with:
           publish_dir: dist
