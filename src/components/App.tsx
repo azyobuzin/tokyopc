@@ -28,8 +28,8 @@ const Footer: FC = () => {
   const address = useSelector(selectAddress);
 
   return (
-    <Box display="flex" alignItems="end">
-      <Box flex={1} padding={2}>
+    <Box display="grid" gridTemplateColumns="1fr 8em" alignItems="end">
+      <Box flex={1} padding={2} width="100%" overflow="hidden">
         <Typography variant="h6" noWrap component="div">
           極座標 {calcPolarCoordinates(centerCoordinates)}
         </Typography>

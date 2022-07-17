@@ -40,6 +40,7 @@ ${calcPolarCoordinates(centerCoordinates)}
       disabled={address == null}
       href={tweetLink}
       target="_blank"
+      fullWidth
     >
       ツイート
     </Button>

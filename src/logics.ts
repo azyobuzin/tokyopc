@@ -35,6 +35,7 @@ function toRad(deg: number): number {
 const distanceFormat = new Intl.NumberFormat(undefined, {
   style: "unit",
   unit: "kilometer",
+  maximumSignificantDigits: 3,
 });
 const degreeFormat = new Intl.NumberFormat(undefined, {
   unit: "degree",
