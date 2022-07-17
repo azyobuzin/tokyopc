@@ -1,4 +1,5 @@
 import { yellow } from "@mui/material/colors";
+import deepEqual from "fast-deep-equal";
 import { Feature, Map, View } from "ol";
 import { fromString } from "ol/color";
 import { LineString, Point } from "ol/geom";
@@ -7,7 +8,7 @@ import VectorLayer from "ol/layer/Vector";
 import OSM from "ol/source/OSM";
 import VectorSource from "ol/source/Vector";
 import { Fill, RegularShape, Stroke, Style, Text } from "ol/style";
-import { FC, memo, useCallback, useContext, useRef } from "react";
+import { FC, memo, useCallback, useContext, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { IMPERIAL_COORDINATES } from "../constants";
 import { HistoryContext } from "../contexts";
@@ -21,10 +22,22 @@ const AppMap: FC = () => {
   const dispatch = useDispatch();
   const history = useContext(HistoryContext);
 
+  const centerCoordinates = useSelector(selectCenterCoordinates);
+
   // レンダリングするタイミングでの座標を取得できるようにする
-  const initialCenterCoordinates = useSelector(selectCenterCoordinates);
-  const centerCoordinatesRef = useRef(initialCenterCoordinates);
-  centerCoordinatesRef.current = initialCenterCoordinates;
+  const centerCoordinatesRef = useRef(centerCoordinates);
+  centerCoordinatesRef.current = centerCoordinates;
+
+  useEffect(() => {
+    // 座標が外部から変化されたら、反映する
+    const view = mapRef.current?.getView();
+    if (view == null) return;
+
+    if (!deepEqual(view.getCenter(), centerCoordinates)) {
+      view.setCenter(centerCoordinates);
+      if (import.meta.env.DEV) console.log("Update center");
+    }
+  }, [centerCoordinates]);
 
   const initializeMap = useCallback(
     (el: HTMLDivElement | null) => {

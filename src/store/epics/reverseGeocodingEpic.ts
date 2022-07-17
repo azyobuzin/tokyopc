@@ -1,4 +1,3 @@
-import { Loader } from "@googlemaps/js-api-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 import deepEqual from "fast-deep-equal";
 import { Epic } from "redux-observable";
@@ -9,39 +8,33 @@ import {
   map,
   switchMap,
 } from "rxjs";
-import { setAddress } from "./actions";
-import { selectCenterCoordinates } from "./selectors";
-import type { AppState } from "./types";
+import { loader } from "../../google-api";
+import { setAddress } from "../actions";
+import { selectCenterCoordinates } from "../selectors";
+import type { AppState } from "../types";
 
-const googleLoader = new Loader({
-  apiKey: import.meta.env.VITE_GOOGLE_API_KEY,
-  libraries: [],
-});
-
-export const reverseGeocodingEpic: Epic<
-  AnyAction,
-  AnyAction,
-  AppState,
-  unknown
-> = (_action$, state$) => {
+const reverseGeocodingEpic: Epic<AnyAction, AnyAction, AppState, unknown> = (
+  _action$,
+  state$
+) => {
   return state$.pipe(
     map(selectCenterCoordinates),
     distinctUntilChanged(deepEqual),
     debounceTime(400),
     switchMap((location) =>
       defer(async () => {
-        await googleLoader.load();
-
         let address: string | null = null;
 
         try {
+          await loader.load();
+
           const result = (
             await new google.maps.Geocoder().geocode({
               location: { lng: location[0], lat: location[1] },
             })
           ).results[0];
 
-          if (import.meta.env.MODE === "development") {
+          if (import.meta.env.DEV) {
             console.log(result);
           }
 
@@ -57,6 +50,8 @@ export const reverseGeocodingEpic: Epic<
     )
   );
 };
+
+export default reverseGeocodingEpic;
 
 const allowedAddressType = new Set([
   "administrative_area_level_1",

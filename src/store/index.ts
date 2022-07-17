@@ -1,13 +1,21 @@
 import { AnyAction, configureStore, createReducer } from "@reduxjs/toolkit";
 import { createEpicMiddleware } from "redux-observable";
 import { IMPERIAL_COORDINATES } from "../constants";
-import { setAddress, setCenterCoordinates } from "./actions";
-import { reverseGeocodingEpic } from "./epics";
+import {
+  clearSearchError,
+  setAddress,
+  setCenterCoordinates,
+  setIsSearching,
+  setSearchResult,
+} from "./actions";
+import { rootEpic } from "./epics";
 import { AppState } from "./types";
 
 const initialState: AppState = {
   centerCoordinates: IMPERIAL_COORDINATES,
   address: null,
+  isSearching: false,
+  searchError: null,
 };
 
 const reducer = createReducer(initialState, (builder) =>
@@ -17,6 +25,22 @@ const reducer = createReducer(initialState, (builder) =>
     })
     .addCase(setAddress, (state, { payload }) => {
       state.address = payload;
+    })
+    .addCase(setIsSearching, (state, { payload }) => {
+      state.isSearching = payload;
+    })
+    .addCase(setSearchResult, (state, { payload }) => {
+      state.isSearching = false;
+
+      if (payload.status === "Success") {
+        state.centerCoordinates = payload.coordinates;
+        state.searchError = null;
+      } else {
+        state.searchError = payload.status;
+      }
+    })
+    .addCase(clearSearchError, (state) => {
+      state.searchError = null;
     })
 );
 
@@ -33,4 +57,4 @@ export const store = configureStore({
     getDefaultMiddleware({ thunk: false }).concat(epicMiddleware),
 });
 
-epicMiddleware.run(reverseGeocodingEpic);
+epicMiddleware.run(rootEpic);
