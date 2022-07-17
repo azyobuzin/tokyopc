@@ -5,6 +5,4 @@ export const setCenterCoordinates = createAction<Coordinate>(
   "setCenterCoordinates"
 );
 
-export const setPolarCoordinates = createAction<string>("setPolarCoordinates");
-
-export const setAddress = createAction<string>("setAddress");
+export const setAddress = createAction<string | null>("setAddress");

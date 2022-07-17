@@ -14,7 +14,8 @@ import {
 import { Box } from "@mui/system";
 import { FC, useCallback, useState } from "react";
 import { useSelector } from "react-redux";
-import { selectAddress, selectPolarCoordinates } from "../store";
+import { calcPolarCoordinates } from "../logics";
+import { selectAddress, selectCenterCoordinates } from "../store/selectors";
 import classes from "./App.module.css";
 import AppMap from "./AppMap";
 import TweetButton from "./TweetButton";
@@ -41,21 +42,21 @@ const App: FC = () => {
 export default App;
 
 const Footer: FC = () => {
-  const polarCoordinates = useSelector(selectPolarCoordinates);
+  const centerCoordinates = useSelector(selectCenterCoordinates);
   const address = useSelector(selectAddress);
 
   return (
     <Box display="flex" alignItems="end">
       <Box flex={1} padding={2}>
         <Typography variant="h6" noWrap component="div">
-          極座標 {polarCoordinates}
+          極座標 {calcPolarCoordinates(centerCoordinates)}
         </Typography>
         <Typography variant="body2" noWrap component="div">
           {address ?? "住所..."}
         </Typography>
       </Box>
       <Box margin={2}>
-        <TweetButton polarCoordinates={polarCoordinates} address={address} />
+        <TweetButton />
       </Box>
     </Box>
   );

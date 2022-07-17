@@ -1,60 +1,61 @@
 import { Loader } from "@googlemaps/js-api-loader";
+import { AnyAction } from "@reduxjs/toolkit";
 import deepEqual from "fast-deep-equal";
 import { Epic } from "redux-observable";
 import {
   debounceTime,
   defer,
   distinctUntilChanged,
-  filter,
   map,
-  merge,
-  share,
   switchMap,
 } from "rxjs";
-import { calcPolarCoordinates } from "../logics";
-import {
-  setAddress,
-  setCenterCoordinates,
-  setPolarCoordinates,
-} from "./actions";
+import { setAddress } from "./actions";
+import { selectCenterCoordinates } from "./selectors";
+import type { AppState } from "./types";
 
 const googleLoader = new Loader({
   apiKey: import.meta.env.VITE_GOOGLE_API_KEY,
   libraries: [],
 });
 
-export const setCenterCoordinatesEpic: Epic = (action$) => {
-  const location$ = action$.pipe(
-    filter(setCenterCoordinates.match),
-    map(
-      (action) => (action as ReturnType<typeof setCenterCoordinates>).payload
-    ),
+export const reverseGeocodingEpic: Epic<
+  AnyAction,
+  AnyAction,
+  AppState,
+  unknown
+> = (_action$, state$) => {
+  return state$.pipe(
+    map(selectCenterCoordinates),
     distinctUntilChanged(deepEqual),
-    share()
-  );
-
-  const polarCoordinates$ = location$.pipe(
-    map((location) => setPolarCoordinates(calcPolarCoordinates(location)))
-  );
-
-  const address$ = location$.pipe(
     debounceTime(400),
     switchMap((location) =>
       defer(async () => {
         await googleLoader.load();
-        const result = (
-          await new google.maps.Geocoder().geocode({
-            location: { lng: location[0], lat: location[1] },
-          })
-        ).results[0];
-        if (result == null) return null;
-        if (import.meta.env.MODE === "development") console.log(result);
-        return setAddress(formatAddress(result.address_components));
+
+        let address: string | null = null;
+
+        try {
+          const result = (
+            await new google.maps.Geocoder().geocode({
+              location: { lng: location[0], lat: location[1] },
+            })
+          ).results[0];
+
+          if (import.meta.env.MODE === "development") {
+            console.log(result);
+          }
+
+          if (result) {
+            address = formatAddress(result.address_components);
+          }
+        } catch (e) {
+          console.error(e);
+        }
+
+        return setAddress(address);
       })
     )
   );
-
-  return merge(polarCoordinates$, address$);
 };
 
 const allowedAddressType = new Set([
