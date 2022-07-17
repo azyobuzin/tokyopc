@@ -5,24 +5,26 @@ export function calcPolarCoordinates(location: Coordinate): string {
   // https://keisan.casio.jp/exec/system/1257670779
   const [x1, y1] = IMPERIAL_COORDINATES.map(toRad);
   const [x2, y2] = location.map(toRad);
-  const r = 6378.137;
-  const deltaX = x2 - x1;
-  const d =
-    r *
-    Math.acos(
-      Math.sin(y1) * Math.sin(y2) +
-        Math.cos(y1) * Math.cos(y2) * Math.cos(deltaX)
-    );
-  const phi =
-    d === 0
-      ? 0
-      : (-Math.atan2(
-          Math.sin(deltaX),
-          Math.cos(y1) * Math.tan(y2) - Math.sin(y1) * Math.cos(deltaX)
-        ) *
-          180) /
-          Math.PI +
-        90;
+  let d = 0;
+  let phi = 0;
+  if (x1 !== x2 && y1 !== y2) {
+    const r = 6378.137;
+    const deltaX = x2 - x1;
+    d =
+      r *
+      Math.acos(
+        Math.sin(y1) * Math.sin(y2) +
+          Math.cos(y1) * Math.cos(y2) * Math.cos(deltaX)
+      );
+    phi =
+      -Math.atan2(
+        Math.sin(deltaX),
+        Math.cos(y1) * Math.tan(y2) - Math.sin(y1) * Math.cos(deltaX)
+      ) +
+      Math.PI / 2;
+    // -180°～180°に正規化
+    phi = Math.atan2(Math.sin(phi), Math.cos(phi)) * (180 / Math.PI);
+  }
   return `(${distanceFormat.format(d)}, ${degreeFormat.format(phi)}°)`;
 }
 
