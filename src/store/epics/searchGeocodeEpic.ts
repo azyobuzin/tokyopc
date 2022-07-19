@@ -1,21 +1,28 @@
-import { AnyAction } from "@reduxjs/toolkit";
+import type { Loader } from "@googlemaps/js-api-loader";
 import { Epic } from "redux-observable";
 import { concatWith, defer, filter, of, switchMap } from "rxjs";
-import { loader } from "../../google-api";
-import { searchGeocode, setIsSearching, setSearchResult } from "../actions";
+import {
+  AppAction,
+  searchGeocode,
+  setIsSearching,
+  setSearchResult,
+} from "../actions";
 import { AppState } from "../types";
 
-const searchGeocodeEpic: Epic<AnyAction, AnyAction, AppState, unknown> = (
-  action$
-) => {
+const searchGeocodeEpic: Epic<
+  AppAction,
+  AppAction,
+  AppState,
+  { googleApiLoader: Loader }
+> = (action$, _state$, { googleApiLoader }) => {
   return action$.pipe(
     filter(searchGeocode.match),
     switchMap(({ payload: query }) =>
-      of<AnyAction>(setIsSearching(true)).pipe(
+      of<AppAction>(setIsSearching(true)).pipe(
         concatWith(
           defer(async () => {
             try {
-              await loader.load();
+              const google = await googleApiLoader.load();
 
               const results = (
                 await new google.maps.Geocoder().geocode({

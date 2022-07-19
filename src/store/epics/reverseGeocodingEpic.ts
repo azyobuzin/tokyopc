@@ -1,4 +1,4 @@
-import { AnyAction } from "@reduxjs/toolkit";
+import type { Loader } from "@googlemaps/js-api-loader";
 import deepEqual from "fast-deep-equal";
 import { Epic } from "redux-observable";
 import {
@@ -8,15 +8,16 @@ import {
   map,
   switchMap,
 } from "rxjs";
-import { loader } from "../../google-api";
-import { setAddress } from "../actions";
+import { AppAction, setAddress } from "../actions";
 import { selectCenterCoordinates } from "../selectors";
 import type { AppState } from "../types";
 
-const reverseGeocodingEpic: Epic<AnyAction, AnyAction, AppState, unknown> = (
-  _action$,
-  state$
-) => {
+const reverseGeocodingEpic: Epic<
+  AppAction,
+  AppAction,
+  AppState,
+  { googleApiLoader: Loader }
+> = (_action$, state$, { googleApiLoader }) => {
   return state$.pipe(
     map(selectCenterCoordinates),
     distinctUntilChanged(deepEqual),
@@ -26,7 +27,7 @@ const reverseGeocodingEpic: Epic<AnyAction, AnyAction, AppState, unknown> = (
         let address: string | null = null;
 
         try {
-          await loader.load();
+          const google = await googleApiLoader.load();
 
           const result = (
             await new google.maps.Geocoder().geocode({

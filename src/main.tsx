@@ -1,3 +1,4 @@
+import { Loader } from "@googlemaps/js-api-loader";
 import { CssBaseline } from "@mui/material";
 import { createHashHistory } from "history";
 import { Coordinate } from "ol/coordinate";
@@ -6,11 +7,16 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import App from "./components/App";
 import { HistoryContext } from "./contexts";
-import { store } from "./store";
+import { AppStore, createStore } from "./store";
 import { setCenterCoordinates } from "./store/actions";
 
+const googleApiLoader = new Loader({
+  apiKey: import.meta.env.VITE_GOOGLE_API_KEY,
+  libraries: [],
+});
+const store = createStore({ googleApiLoader });
 const history = createHashHistory();
-setCenterCoordinatesFromParams();
+setCenterCoordinatesFromParams(store);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -23,7 +29,7 @@ createRoot(document.getElementById("root")!).render(
   </StrictMode>
 );
 
-function setCenterCoordinatesFromParams(): void {
+function setCenterCoordinatesFromParams(store: AppStore): void {
   const params = new URLSearchParams(history.location.search);
   let centerCoordinates: Coordinate | null = null;
   ["lng", "lat"].forEach((key, i) => {

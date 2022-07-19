@@ -1,7 +1,13 @@
-import { AnyAction, configureStore, createReducer } from "@reduxjs/toolkit";
+import {
+  Reducer,
+  Store,
+  configureStore,
+  createReducer,
+} from "@reduxjs/toolkit";
 import { createEpicMiddleware } from "redux-observable";
 import { IMPERIAL_COORDINATES } from "../constants";
 import {
+  AppAction,
   clearSearchError,
   setAddress,
   setCenterCoordinates,
@@ -9,7 +15,7 @@ import {
   setSearchResult,
 } from "./actions";
 import { rootEpic } from "./epics";
-import { AppState } from "./types";
+import { AppState, StoreDependencies } from "./types";
 
 const initialState: AppState = {
   centerCoordinates: IMPERIAL_COORDINATES,
@@ -44,17 +50,23 @@ const reducer = createReducer(initialState, (builder) =>
     })
 );
 
-const epicMiddleware = createEpicMiddleware<
-  AnyAction,
-  AnyAction,
-  AppState,
-  unknown
->();
+export type AppStore = Store<AppState, AppAction>;
 
-export const store = configureStore({
-  reducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ thunk: false }).concat(epicMiddleware),
-});
+export function createStore(dependencies: StoreDependencies): AppStore {
+  const epicMiddleware = createEpicMiddleware<
+    AppAction,
+    AppAction,
+    AppState,
+    StoreDependencies
+  >({ dependencies });
 
-epicMiddleware.run(rootEpic);
+  const store = configureStore({
+    reducer: reducer as Reducer<AppState, AppAction>,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({ thunk: false }).concat(epicMiddleware),
+  });
+
+  epicMiddleware.run(rootEpic);
+
+  return store;
+}

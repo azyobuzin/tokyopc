@@ -1,17 +1,34 @@
-import { createAction } from "@reduxjs/toolkit";
+import { PayloadActionCreator, createAction } from "@reduxjs/toolkit";
 import type { Coordinate } from "ol/coordinate";
 import type { SearchResult } from "./types";
 
-export const setCenterCoordinates = createAction<Coordinate>(
+// createAction の型推論をさせるためにカリー化
+function action<T extends string>(
+  type: T
+): { payload<P>(): PayloadActionCreator<P, T> } {
+  return { payload: <P>() => createAction<P, T>(type) };
+}
+
+export const setCenterCoordinates = action(
   "setCenterCoordinates"
-);
+).payload<Coordinate>();
 
-export const setAddress = createAction<string | null>("setAddress");
+export const setAddress = action("setAddress").payload<string | null>();
 
-export const searchGeocode = createAction<string>("searchGeocode");
+export const searchGeocode = action("searchGeocode").payload<string>();
 
-export const setIsSearching = createAction<boolean>("setIsSearching");
+export const setIsSearching = action("setIsSearching").payload<boolean>();
 
-export const setSearchResult = createAction<SearchResult>("setSearchResult");
+export const setSearchResult =
+  action("setSearchResult").payload<SearchResult>();
 
 export const clearSearchError = createAction("clearSerachError");
+
+export type AppAction = ReturnType<
+  | typeof clearSearchError
+  | typeof searchGeocode
+  | typeof setAddress
+  | typeof setCenterCoordinates
+  | typeof setIsSearching
+  | typeof setSearchResult
+>;
