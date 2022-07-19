@@ -1,14 +1,18 @@
 import type { Loader } from "@googlemaps/js-api-loader";
 import deepEqual from "fast-deep-equal";
+import { Coordinate } from "ol/coordinate";
 import { Epic } from "redux-observable";
 import {
+  concat,
   debounceTime,
-  defer,
   distinctUntilChanged,
+  first,
   map,
+  mergeMap,
+  of,
   switchMap,
 } from "rxjs";
-import { AppAction, setAddress } from "../actions";
+import { AppAction, setAddress, setIsGettingAddress } from "../actions";
 import { selectCenterCoordinates } from "../selectors";
 import type { AppState } from "../types";
 
@@ -23,36 +27,48 @@ const reverseGeocodingEpic: Epic<
     distinctUntilChanged(deepEqual),
     debounceTime(400),
     switchMap((location) =>
-      defer(async () => {
-        let address: string | null = null;
-
-        try {
-          const google = await googleApiLoader.load();
-
-          const result = (
-            await new google.maps.Geocoder().geocode({
-              location: { lng: location[0], lat: location[1] },
-            })
-          ).results[0];
-
-          if (import.meta.env.DEV) {
-            console.log(result);
-          }
-
-          if (result) {
-            address = formatAddress(result.address_components);
-          }
-        } catch (e) {
-          console.error(e);
-        }
-
-        return setAddress(address);
-      })
+      state$.pipe(
+        first((state) => !state.isGettingAddress),
+        mergeMap(() =>
+          concat(
+            of<AppAction>(setIsGettingAddress(true)),
+            (async (): Promise<AppAction> =>
+              setAddress(await getAddress(location, googleApiLoader)))()
+          )
+        )
+      )
     )
   );
 };
 
 export default reverseGeocodingEpic;
+
+async function getAddress(
+  location: Coordinate,
+  googleApiLoader: Loader
+): Promise<string | null> {
+  try {
+    const google = await googleApiLoader.load();
+
+    const result = (
+      await new google.maps.Geocoder().geocode({
+        location: { lng: location[0], lat: location[1] },
+      })
+    ).results[0];
+
+    if (import.meta.env.DEV) {
+      console.log(result);
+    }
+
+    if (result) {
+      return formatAddress(result.address_components);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+
+  return null;
+}
 
 const allowedAddressType = new Set([
   "administrative_area_level_1",

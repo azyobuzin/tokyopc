@@ -1,14 +1,15 @@
-import type { Coordinate } from "ol/coordinate";
 import type { AppState } from "./types";
 
-export const selectCenterCoordinates = (state: AppState): Coordinate =>
-  state.centerCoordinates;
+function stateSelector<T extends keyof AppState>(
+  prop: T
+): (state: AppState) => AppState[T] {
+  return (state) => state[prop];
+}
 
-export const selectAddress = (state: AppState): string | null => state.address;
+export const selectCenterCoordinates = stateSelector("centerCoordinates");
 
-export const selectIsSearching = (state: AppState): boolean =>
-  state.isSearching;
+export const selectAddress = stateSelector("address");
 
-export const selectSearchError = (
-  state: AppState
-): "Error" | "NotFound" | null => state.searchError;
+export const selectIsSearching = stateSelector("isSearching");
+
+export const selectSearchError = stateSelector("searchError");

@@ -4,6 +4,7 @@ import type { Coordinate } from "ol/coordinate";
 export interface AppState {
   centerCoordinates: Coordinate;
   address: string | null;
+  isGettingAddress: boolean;
   isSearching: boolean;
   searchError: "Error" | "NotFound" | null;
 }

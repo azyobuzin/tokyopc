@@ -11,6 +11,7 @@ import {
   clearSearchError,
   setAddress,
   setCenterCoordinates,
+  setIsGettingAddress,
   setIsSearching,
   setSearchResult,
 } from "./actions";
@@ -20,6 +21,7 @@ import { AppState, StoreDependencies } from "./types";
 const initialState: AppState = {
   centerCoordinates: IMPERIAL_COORDINATES,
   address: null,
+  isGettingAddress: false,
   isSearching: false,
   searchError: null,
 };
@@ -31,6 +33,10 @@ const reducer = createReducer(initialState, (builder) =>
     })
     .addCase(setAddress, (state, { payload }) => {
       state.address = payload;
+      state.isGettingAddress = false;
+    })
+    .addCase(setIsGettingAddress, (state, { payload }) => {
+      state.isGettingAddress = payload;
     })
     .addCase(setIsSearching, (state, { payload }) => {
       state.isSearching = payload;

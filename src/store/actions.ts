@@ -15,6 +15,10 @@ export const setCenterCoordinates = action(
 
 export const setAddress = action("setAddress").payload<string | null>();
 
+export const setIsGettingAddress = action(
+  "setIsGettingAddress"
+).payload<boolean>();
+
 export const searchGeocode = action("searchGeocode").payload<string>();
 
 export const setIsSearching = action("setIsSearching").payload<boolean>();
@@ -29,6 +33,7 @@ export type AppAction = ReturnType<
   | typeof searchGeocode
   | typeof setAddress
   | typeof setCenterCoordinates
+  | typeof setIsGettingAddress
   | typeof setIsSearching
   | typeof setSearchResult
 >;
