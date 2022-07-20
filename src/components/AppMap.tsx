@@ -3,6 +3,7 @@ import deepEqual from "fast-deep-equal";
 import { Feature, Map, View } from "ol";
 import { fromString } from "ol/color";
 import { LineString, Point } from "ol/geom";
+import { defaults } from "ol/interaction";
 import TileLayer from "ol/layer/Tile";
 import VectorLayer from "ol/layer/Vector";
 import OSM from "ol/source/OSM";
@@ -91,6 +92,9 @@ const AppMap: FC = () => {
           center: centerCoordinatesRef.current,
           zoom: 12,
         }),
+        interactions: defaults({
+          onFocusOnly: false,
+        }),
       });
 
       mapRef.current = map;
@@ -103,10 +107,6 @@ const AppMap: FC = () => {
 
         const center = map.getView().getCenter();
         if (center) {
-          const params = new URLSearchParams(history.location.search);
-          params.set("lng", String(center[0]));
-          params.set("lat", String(center[1]));
-          history.replace({ search: params.toString() });
           dispatch(setCenterCoordinates(center));
         }
       });
@@ -116,7 +116,7 @@ const AppMap: FC = () => {
 
   return (
     <div className={classes.mapContainer}>
-      <div ref={initializeMap} className={classes.map} />
+      <div ref={initializeMap} className={classes.map} tabIndex={0} />
       <CenterMarker />
     </div>
   );
@@ -126,7 +126,7 @@ export default AppMap;
 
 const CenterMarker = memo(function CenterMarker() {
   return (
-    <div className={classes.centerMarker}>
+    <div className={classes.centerMarker} aria-hidden="true">
       <svg width="100%" height="100%" viewBox="0 0 10 10">
         <line
           x1="0"

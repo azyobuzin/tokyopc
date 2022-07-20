@@ -1,8 +1,7 @@
 .container {
   display: grid;
   width: 100%;
-  height: 100vh;
-  height: 100dvh; /* iOS 向け hack */
+  height: 100%;
   overflow: hidden;
   grid-template-rows: auto 1fr auto;
 }

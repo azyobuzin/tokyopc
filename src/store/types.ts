@@ -1,4 +1,5 @@
 import type { Loader } from "@googlemaps/js-api-loader";
+import type { History } from "history";
 import type { Coordinate } from "ol/coordinate";
 
 export interface AppState {
@@ -17,4 +18,5 @@ export type SearchResult =
 
 export interface StoreDependencies {
   googleApiLoader: Loader;
+  history?: History;
 }

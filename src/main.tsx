@@ -14,8 +14,8 @@ const googleApiLoader = new Loader({
   apiKey: import.meta.env.VITE_GOOGLE_API_KEY,
   libraries: [],
 });
-const store = createStore({ googleApiLoader });
 const history = createHashHistory();
+const store = createStore({ googleApiLoader, history });
 setCenterCoordinatesFromParams(store);
 
 createRoot(document.getElementById("root")!).render(

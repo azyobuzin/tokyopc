@@ -1,5 +1,6 @@
 import type { Loader } from "@googlemaps/js-api-loader";
 import deepEqual from "fast-deep-equal";
+import type { History } from "history";
 import { Coordinate } from "ol/coordinate";
 import { Epic } from "redux-observable";
 import {
@@ -11,6 +12,7 @@ import {
   mergeMap,
   of,
   switchMap,
+  tap,
 } from "rxjs";
 import { AppAction, setAddress, setIsGettingAddress } from "../actions";
 import { selectCenterCoordinates } from "../selectors";
@@ -20,12 +22,13 @@ const reverseGeocodingEpic: Epic<
   AppAction,
   AppAction,
   AppState,
-  { googleApiLoader: Loader }
-> = (_action$, state$, { googleApiLoader }) => {
+  { googleApiLoader: Loader; history?: History }
+> = (_action$, state$, { googleApiLoader, history }) => {
   return state$.pipe(
     map(selectCenterCoordinates),
     distinctUntilChanged(deepEqual),
     debounceTime(400),
+    tap((location) => updateBrowserLocation(location, history)),
     switchMap((location) =>
       state$.pipe(
         first((state) => !state.isGettingAddress),
@@ -101,4 +104,15 @@ function formatAddress(
     .map((x) => x.short_name)
     .reverse()
     .join("");
+}
+
+function updateBrowserLocation(
+  [lng, lat]: Coordinate,
+  history: History | undefined
+): void {
+  if (!history) return;
+  const params = new URLSearchParams(history.location.search);
+  params.set("lng", String(lng));
+  params.set("lat", String(lat));
+  history.replace({ search: params.toString() });
 }
