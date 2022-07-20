@@ -4,19 +4,27 @@ import type { History } from "history";
 import { Coordinate } from "ol/coordinate";
 import { Epic } from "redux-observable";
 import {
+  EMPTY,
   concat,
   debounceTime,
   distinctUntilChanged,
   first,
   map,
+  merge,
   mergeMap,
   of,
   switchMap,
   tap,
+  timer,
 } from "rxjs";
-import { AppAction, setAddress, setIsGettingAddress } from "../actions";
+import {
+  AppAction,
+  beginReverseGeocoding,
+  clearAddress,
+  setAddress,
+} from "../actions";
 import { selectCenterCoordinates } from "../selectors";
-import type { AppState } from "../types";
+import type { AddressResult, AppState } from "../types";
 
 const reverseGeocodingEpic: Epic<
   AppAction,
@@ -24,7 +32,8 @@ const reverseGeocodingEpic: Epic<
   AppState,
   { googleApiLoader: Loader; history?: History }
 > = (_action$, state$, { googleApiLoader, history }) => {
-  return state$.pipe(
+  // 座標が変更されたら、スロットリングしながら住所を求める
+  const getAddressPipeline = state$.pipe(
     map(selectCenterCoordinates),
     distinctUntilChanged(deepEqual),
     debounceTime(400),
@@ -34,7 +43,7 @@ const reverseGeocodingEpic: Epic<
         first((state) => !state.isGettingAddress),
         mergeMap(() =>
           concat(
-            of<AppAction>(setIsGettingAddress(true)),
+            of<AppAction>(beginReverseGeocoding()),
             (async (): Promise<AppAction> =>
               setAddress(await getAddress(location, googleApiLoader)))()
           )
@@ -42,20 +51,35 @@ const reverseGeocodingEpic: Epic<
       )
     )
   );
+
+  // 2秒以内に住所を取得できなかったら、住所表示をクリアする
+  const clearAddressPipeline = state$.pipe(
+    map(
+      (state) =>
+        state.address == null ||
+        deepEqual(state.address.coordinates, state.centerCoordinates)
+    ),
+    distinctUntilChanged(),
+    switchMap((addressUpToDate) =>
+      addressUpToDate ? EMPTY : timer(2000).pipe(map(() => clearAddress()))
+    )
+  );
+
+  return merge(getAddressPipeline, clearAddressPipeline);
 };
 
 export default reverseGeocodingEpic;
 
 async function getAddress(
-  location: Coordinate,
+  coordinates: Coordinate,
   googleApiLoader: Loader
-): Promise<string | null> {
+): Promise<AddressResult | null> {
   try {
     const google = await googleApiLoader.load();
 
     const result = (
       await new google.maps.Geocoder().geocode({
-        location: { lng: location[0], lat: location[1] },
+        location: { lng: coordinates[0], lat: coordinates[1] },
       })
     ).results[0];
 
@@ -64,7 +88,7 @@ async function getAddress(
     }
 
     if (result) {
-      return formatAddress(result.address_components);
+      return { address: formatAddress(result.address_components), coordinates };
     }
   } catch (e) {
     console.error(e);

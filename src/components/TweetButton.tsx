@@ -1,38 +1,41 @@
 import { Button } from "@mui/material";
 import { FC, useContext } from "react";
 import { useSelector } from "react-redux";
+import { BASE_URL } from "../constants";
 import { HistoryContext } from "../contexts";
 import { calcPolarCoordinates } from "../logics";
-import { selectAddress, selectCenterCoordinates } from "../store/selectors";
+import { selectAddress } from "../store/selectors";
 
 const TweetButton: FC = () => {
-  const centerCoordinates = useSelector(selectCenterCoordinates);
   const address = useSelector(selectAddress);
   const history = useContext(HistoryContext);
 
-  let tweetBody = "";
+  let tweetLink = BASE_URL;
+
   if (address != null) {
-    tweetBody = `${address}
+    const tweetBody = `${address.address}
 ↓ 皇居からの極座標
-${calcPolarCoordinates(centerCoordinates)}
+${calcPolarCoordinates(address.coordinates)}
 `;
+
+    const [lng, lat] = address.coordinates;
+    const permalink =
+      BASE_URL +
+      "/" +
+      history.createHref({
+        pathname: "/",
+        search: new URLSearchParams([
+          ["lng", String(lng)],
+          ["lat", String(lat)],
+        ]).toString(),
+      });
+
+    tweetLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+      tweetBody
+    )}&url=${encodeURIComponent(permalink)}&hashtags=${encodeURIComponent(
+      "東京極座標"
+    )}`;
   }
-
-  const permalink =
-    "https://tokyopc.azyobuzi.net/" +
-    history.createHref({
-      pathname: "/",
-      search: new URLSearchParams([
-        ["lng", String(centerCoordinates[0])],
-        ["lat", String(centerCoordinates[1])],
-      ]).toString(),
-    });
-
-  const tweetLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-    tweetBody
-  )}&url=${encodeURIComponent(permalink)}&hashtags=${encodeURIComponent(
-    "東京極座標"
-  )}`;
 
   return (
     <Button

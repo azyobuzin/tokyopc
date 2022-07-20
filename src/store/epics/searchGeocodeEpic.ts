@@ -3,8 +3,8 @@ import { Epic } from "redux-observable";
 import { concat, filter, of, switchMap } from "rxjs";
 import {
   AppAction,
+  beginSearchGeocode,
   searchGeocode,
-  setIsSearching,
   setSearchResult,
 } from "../actions";
 import { AppState, SearchResult } from "../types";
@@ -19,7 +19,7 @@ const searchGeocodeEpic: Epic<
     filter(searchGeocode.match),
     switchMap(({ payload: query }) =>
       concat(
-        of<AppAction>(setIsSearching(true)),
+        of<AppAction>(beginSearchGeocode()),
         (async (): Promise<AppAction> =>
           setSearchResult(await doSearch(query, googleApiLoader)))()
       )

@@ -8,11 +8,12 @@ import { createEpicMiddleware } from "redux-observable";
 import { IMPERIAL_COORDINATES } from "../constants";
 import {
   AppAction,
+  beginReverseGeocoding,
+  beginSearchGeocode,
+  clearAddress,
   clearSearchError,
   setAddress,
   setCenterCoordinates,
-  setIsGettingAddress,
-  setIsSearching,
   setSearchResult,
 } from "./actions";
 import { rootEpic } from "./epics";
@@ -35,11 +36,14 @@ const reducer = createReducer(initialState, (builder) =>
       state.address = payload;
       state.isGettingAddress = false;
     })
-    .addCase(setIsGettingAddress, (state, { payload }) => {
-      state.isGettingAddress = payload;
+    .addCase(beginReverseGeocoding, (state) => {
+      state.isGettingAddress = true;
     })
-    .addCase(setIsSearching, (state, { payload }) => {
-      state.isSearching = payload;
+    .addCase(clearAddress, (state) => {
+      state.address = null;
+    })
+    .addCase(beginSearchGeocode, (state) => {
+      state.isSearching = true;
     })
     .addCase(setSearchResult, (state, { payload }) => {
       state.isSearching = false;

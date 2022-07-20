@@ -34,7 +34,7 @@ const Footer: FC = () => {
           極座標 {calcPolarCoordinates(centerCoordinates)}
         </Typography>
         <Typography variant="body2" noWrap component="div">
-          {address ?? "住所..."}
+          {address?.address ?? "住所..."}
         </Typography>
       </Box>
       <Box margin={2}>
