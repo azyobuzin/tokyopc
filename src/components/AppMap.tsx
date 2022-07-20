@@ -9,10 +9,9 @@ import VectorLayer from "ol/layer/Vector";
 import OSM from "ol/source/OSM";
 import VectorSource from "ol/source/Vector";
 import { Fill, RegularShape, Stroke, Style, Text } from "ol/style";
-import { FC, memo, useCallback, useContext, useEffect, useRef } from "react";
+import { FC, memo, useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { IMPERIAL_COORDINATES } from "../constants";
-import { HistoryContext } from "../contexts";
 import { setCenterCoordinates } from "../store/actions";
 import { selectCenterCoordinates } from "../store/selectors";
 import "ol/ol.css";
@@ -21,7 +20,6 @@ import classes from "./AppMap.module.css";
 const AppMap: FC = () => {
   const mapRef = useRef<Map>();
   const dispatch = useDispatch();
-  const history = useContext(HistoryContext);
 
   const centerCoordinates = useSelector(selectCenterCoordinates);
 

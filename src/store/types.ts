@@ -4,6 +4,8 @@ import type { Coordinate } from "ol/coordinate";
 
 export interface AppState {
   centerCoordinates: Coordinate;
+  // centerCoordinates が地名検索で得られた座標のときの検索クエリ
+  userGivenAddress: string | null;
   address: AddressResult | null;
   isGettingAddress: boolean;
   isSearching: boolean;
@@ -20,7 +22,7 @@ export type SearchResult =
   | {
       status: "Error" | "NotFound";
     }
-  | { status: "Success"; coordinates: Coordinate };
+  | { status: "Success"; query: string; coordinates: Coordinate };
 
 export interface StoreDependencies {
   googleApiLoader: Loader;

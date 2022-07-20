@@ -4,21 +4,25 @@ import { useSelector } from "react-redux";
 import { BASE_URL } from "../constants";
 import { HistoryContext } from "../contexts";
 import { calcPolarCoordinates } from "../logics";
-import { selectAddress } from "../store/selectors";
+import {
+  selectAddressPreferUserGiven,
+  selectCoordinatesCorrespondingToAddress,
+} from "../store/selectors";
 
 const TweetButton: FC = () => {
-  const address = useSelector(selectAddress);
+  const coordinates = useSelector(selectCoordinatesCorrespondingToAddress);
+  const address = useSelector(selectAddressPreferUserGiven);
   const history = useContext(HistoryContext);
 
   let tweetLink = BASE_URL;
 
   if (address != null) {
-    const tweetBody = `${address.address}
+    const tweetBody = `${address}
 ↓ 皇居からの極座標
-${calcPolarCoordinates(address.coordinates)}
+${calcPolarCoordinates(coordinates)}
 `;
 
-    const [lng, lat] = address.coordinates;
+    const [lng, lat] = coordinates;
     const permalink =
       BASE_URL +
       "/" +

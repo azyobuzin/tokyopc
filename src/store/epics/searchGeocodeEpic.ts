@@ -54,6 +54,7 @@ async function doSearch(
     const location = results[0].geometry.location;
     return {
       status: "Success",
+      query,
       coordinates: [location.lng(), location.lat()],
     };
   } catch (e) {

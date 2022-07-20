@@ -4,6 +4,7 @@ import {
   configureStore,
   createReducer,
 } from "@reduxjs/toolkit";
+import deepEqual from "fast-deep-equal";
 import { createEpicMiddleware } from "redux-observable";
 import { IMPERIAL_COORDINATES } from "../constants";
 import {
@@ -21,6 +22,7 @@ import { AppState, StoreDependencies } from "./types";
 
 const initialState: AppState = {
   centerCoordinates: IMPERIAL_COORDINATES,
+  userGivenAddress: "皇居",
   address: null,
   isGettingAddress: false,
   isSearching: false,
@@ -30,7 +32,9 @@ const initialState: AppState = {
 const reducer = createReducer(initialState, (builder) =>
   builder
     .addCase(setCenterCoordinates, (state, { payload }) => {
+      if (deepEqual(state.centerCoordinates, payload)) return;
       state.centerCoordinates = payload;
+      state.userGivenAddress = null;
     })
     .addCase(setAddress, (state, { payload }) => {
       state.address = payload;
@@ -50,6 +54,7 @@ const reducer = createReducer(initialState, (builder) =>
 
       if (payload.status === "Success") {
         state.centerCoordinates = payload.coordinates;
+        state.userGivenAddress = payload.query;
         state.searchError = null;
       } else {
         state.searchError = payload.status;
