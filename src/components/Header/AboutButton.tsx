@@ -18,7 +18,12 @@ const AboutButton: FC = () => {
 
   return (
     <>
-      <IconButton size="large" color="inherit" onClick={handleOpen}>
+      <IconButton
+        size="large"
+        color="inherit"
+        onClick={handleOpen}
+        aria-label="東京極座標について"
+      >
         <InfoOutlinedIcon />
       </IconButton>
       <Dialog

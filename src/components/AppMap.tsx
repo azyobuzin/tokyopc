@@ -2,7 +2,7 @@ import { yellow } from "@mui/material/colors";
 import deepEqual from "fast-deep-equal";
 import { Feature, Map, View } from "ol";
 import { fromString } from "ol/color";
-import { LineString, Point } from "ol/geom";
+import { Point } from "ol/geom";
 import { defaults } from "ol/interaction";
 import TileLayer from "ol/layer/Tile";
 import VectorLayer from "ol/layer/Vector";
@@ -49,13 +49,6 @@ const AppMap: FC = () => {
         source: new OSM(),
       });
 
-      const lineFeature = new Feature(
-        new LineString([
-          [0, 0],
-          [0, 0],
-        ])
-      );
-
       const centerStarFeature = new Feature(new Point(IMPERIAL_COORDINATES));
 
       // https://openlayers.org/en/latest/examples/regularshape.html
@@ -78,7 +71,7 @@ const AppMap: FC = () => {
 
       const vectorLayer = new VectorLayer({
         source: new VectorSource({
-          features: [lineFeature, centerStarFeature],
+          features: [centerStarFeature],
         }),
       });
 
