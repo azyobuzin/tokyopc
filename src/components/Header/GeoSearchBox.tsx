@@ -41,6 +41,7 @@ const GeoSearchBox: FC = () => {
         inputRef={inputRef}
         placeholder="地名で検索"
         inputMode="search"
+        inputProps={{ enterKeyHint: "search" }}
       />
       {searchError && (
         <Snackbar open autoHideDuration={5000} onClose={handleSnackbarClose}>
