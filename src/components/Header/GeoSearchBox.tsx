@@ -1,6 +1,12 @@
 import SearchIcon from "@mui/icons-material/Search";
-import { Alert, CircularProgress, InputBase, Snackbar } from "@mui/material";
-import { alpha, styled } from "@mui/material/styles";
+import {
+  Alert,
+  CircularProgress,
+  InputBase,
+  Snackbar,
+  alpha,
+  styled,
+} from "@mui/material";
 import { FC, FormEvent, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearSearchError, searchGeocode } from "../../store/actions";

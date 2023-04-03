@@ -1,27 +1,34 @@
-import { Typography } from "@mui/material";
+import { Typography, styled } from "@mui/material";
 import { Box } from "@mui/system";
 import { FC } from "react";
 import { useSelector } from "react-redux";
 import { calcPolarCoordinates } from "../logics";
 import { selectAddress, selectCenterCoordinates } from "../store/selectors";
-import classes from "./App.module.css";
 import AppMap from "./AppMap";
 import Header from "./Header";
 import TweetButton from "./TweetButton";
 
 const App: FC = () => {
   return (
-    <div className={classes.container}>
+    <AppContainer>
       <Header />
       <Box height="100%">
         <AppMap />
       </Box>
       <Footer />
-    </div>
+    </AppContainer>
   );
 };
 
 export default App;
+
+const AppContainer = styled("div")({
+  display: "grid",
+  width: "100%",
+  height: "100%",
+  overflow: "hidden",
+  gridTemplateRows: "auto 1fr auto",
+});
 
 const Footer: FC = () => {
   const centerCoordinates = useSelector(selectCenterCoordinates);
