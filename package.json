@@ -5,6 +5,7 @@
   "license": "MIT",
   "repository": "github:azyobuzin/tokyopc",
   "type": "module",
+  "packageManager": "npm@8.19.3",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
