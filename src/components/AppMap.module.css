@@ -18,3 +18,8 @@
   color: #424242;
   pointer-events: none;
 }
+
+.myLocationButton {
+  top: 4em;
+  left: 0.5em;
+}

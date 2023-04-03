@@ -1,7 +1,9 @@
+import MyLocationIcon from "@mui/icons-material/MyLocation";
 import { yellow } from "@mui/material/colors";
 import deepEqual from "fast-deep-equal";
 import { Feature, Map, View } from "ol";
 import { fromString } from "ol/color";
+import { Control, defaults as defaultControls } from "ol/control";
 import { Point } from "ol/geom";
 import { defaults } from "ol/interaction";
 import TileLayer from "ol/layer/Tile";
@@ -9,7 +11,8 @@ import VectorLayer from "ol/layer/Vector";
 import OSM from "ol/source/OSM";
 import VectorSource from "ol/source/Vector";
 import { Fill, RegularShape, Stroke, Style, Text } from "ol/style";
-import { FC, memo, useCallback, useEffect, useRef } from "react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { IMPERIAL_COORDINATES } from "../constants";
 import { setCenterCoordinates } from "../store/actions";
@@ -19,6 +22,8 @@ import classes from "./AppMap.module.css";
 
 const AppMap: FC = () => {
   const mapRef = useRef<Map>();
+  const [myLocationButtonEl, setMyLocationButtonEl] =
+    useState<HTMLDivElement | null>(null);
   const dispatch = useDispatch();
 
   const centerCoordinates = useSelector(selectCenterCoordinates);
@@ -75,6 +80,9 @@ const AppMap: FC = () => {
         }),
       });
 
+      const myLocationButtonEl = document.createElement("div");
+      myLocationButtonEl.className = `ol-control ${classes.myLocationButton}`;
+
       const map = new Map({
         layers: [mapLayer, vectorLayer],
         target: el,
@@ -83,6 +91,9 @@ const AppMap: FC = () => {
           center: centerCoordinatesRef.current,
           zoom: 12,
         }),
+        controls: defaultControls().extend([
+          new Control({ element: myLocationButtonEl }),
+        ]),
         interactions: defaults({
           onFocusOnly: false,
         }),
@@ -101,6 +112,8 @@ const AppMap: FC = () => {
           dispatch(setCenterCoordinates(center));
         }
       });
+
+      setMyLocationButtonEl(myLocationButtonEl);
     },
     [dispatch]
   );
@@ -108,34 +121,42 @@ const AppMap: FC = () => {
   return (
     <div className={classes.mapContainer}>
       <div ref={initializeMap} className={classes.map} tabIndex={0} />
-      <CenterMarker />
+      {centerMarker}
+      {myLocationButtonEl &&
+        createPortal(<MyLocationButton />, myLocationButtonEl)}
     </div>
   );
 };
 
 export default AppMap;
 
-const CenterMarker = memo(function CenterMarker() {
+const centerMarker = (
+  <div className={classes.centerMarker} aria-hidden="true">
+    <svg width="100%" height="100%" viewBox="0 0 10 10">
+      <line
+        x1="0"
+        y1="5"
+        x2="10"
+        y2="5"
+        stroke="currentColor"
+        strokeWidth="1"
+      />
+      <line
+        x1="5"
+        y1="0"
+        x2="5"
+        y2="10"
+        stroke="currentColor"
+        strokeWidth="1"
+      />
+    </svg>
+  </div>
+);
+
+const MyLocationButton: FC = () => {
   return (
-    <div className={classes.centerMarker} aria-hidden="true">
-      <svg width="100%" height="100%" viewBox="0 0 10 10">
-        <line
-          x1="0"
-          y1="5"
-          x2="10"
-          y2="5"
-          stroke="currentColor"
-          strokeWidth="1"
-        />
-        <line
-          x1="5"
-          y1="0"
-          x2="5"
-          y2="10"
-          stroke="currentColor"
-          strokeWidth="1"
-        />
-      </svg>
-    </div>
+    <button title="現在地に移動">
+      <MyLocationIcon fontSize="inherit" />
+    </button>
   );
-});
+};
