@@ -41,7 +41,12 @@ const AboutButton: FC = () => {
             結局東京のどこらへんだよ！の説明に困ったときに、ご利用ください。
           </Typography>
           <Typography variant="body2">
-            <Link href="https://twitter.com/azyobuzin" target="_blank">
+            <Link
+              href="https://twitter.com/azyobuzin"
+              target="_blank"
+              rel="noopener"
+              underline="hover"
+            >
               作者: @azyobuzin
             </Link>
           </Typography>
