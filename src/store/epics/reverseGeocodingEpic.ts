@@ -1,8 +1,8 @@
 import type { Loader } from "@googlemaps/js-api-loader";
 import deepEqual from "fast-deep-equal";
 import type { History } from "history";
-import { Coordinate } from "ol/coordinate";
-import { Epic } from "redux-observable";
+import type { Coordinate } from "ol/coordinate";
+import type { Epic } from "redux-observable";
 import {
   EMPTY,
   concat,
@@ -18,7 +18,7 @@ import {
   timer,
 } from "rxjs";
 import {
-  AppAction,
+  type AppAction,
   beginReverseGeocoding,
   clearAddress,
   setAddress,

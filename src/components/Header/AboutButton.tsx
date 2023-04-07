@@ -9,7 +9,7 @@ import {
   Link,
   Typography,
 } from "@mui/material";
-import { FC, useCallback, useState } from "react";
+import { type FC, useCallback, useState } from "react";
 
 const AboutButton: FC = () => {
   const [open, setOpen] = useState(false);

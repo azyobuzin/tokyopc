@@ -4,28 +4,48 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
+    "plugin:react-hooks/recommended",
     "plugin:import/recommended",
     "plugin:import/typescript",
     "prettier"
   ],
   "plugins": ["unicorn"],
   "rules": {
-    "sort-imports": [
+    "@typescript-eslint/consistent-type-imports": [
       "error",
       {
-        "ignoreDeclarationSort": true
+        "disallowTypeAnnotations": false,
+        "fixStyle": "inline-type-imports"
       }
     ],
+    "@typescript-eslint/explicit-function-return-type": [
+      "error",
+      {
+        "allowExpressions": true,
+        "allowHigherOrderFunctions": true,
+        "allowTypedFunctionExpressions": true,
+        "allowDirectConstAssertionInArrowFunctions": true
+      }
+    ],
+    "@typescript-eslint/method-signature-style": "error",
+    "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/promise-function-async": "off",
+    "@typescript-eslint/sort-type-union-intersection-members": "error",
     "import/order": [
       "error",
       {
         "alphabetize": { "order": "asc" }
       }
     ],
-    "@typescript-eslint/explicit-function-return-type": "error",
-    "@typescript-eslint/no-non-null-assertion": "off",
-    "@typescript-eslint/promise-function-async": "off",
-    "@typescript-eslint/sort-type-union-intersection-members": "error",
+    "react/no-typos": "error",
+    "sort-imports": [
+      "error",
+      {
+        "ignoreDeclarationSort": true
+      }
+    ],
     "unicorn/no-instanceof-array": "error",
     "unicorn/prefer-array-find": "error",
     "unicorn/prefer-array-flat": "error",

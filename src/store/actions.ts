@@ -1,11 +1,11 @@
-import { PayloadActionCreator, createAction } from "@reduxjs/toolkit";
+import { type PayloadActionCreator, createAction } from "@reduxjs/toolkit";
 import type { Coordinate } from "ol/coordinate";
 import type { AddressResult, SearchResult } from "./types";
 
 // createAction の型推論をさせるためにカリー化
 function action<T extends string>(
   type: T
-): { payload<P>(): PayloadActionCreator<P, T> } {
+): { payload: <P>() => PayloadActionCreator<P, T> } {
   return { payload: <P>() => createAction<P, T>(type) };
 }
 

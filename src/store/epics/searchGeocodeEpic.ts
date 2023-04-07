@@ -1,13 +1,13 @@
 import type { Loader } from "@googlemaps/js-api-loader";
-import { Epic } from "redux-observable";
+import type { Epic } from "redux-observable";
 import { concat, filter, of, switchMap } from "rxjs";
 import {
-  AppAction,
+  type AppAction,
   beginSearchGeocode,
   searchGeocode,
   setSearchResult,
 } from "../actions";
-import { AppState, SearchResult } from "../types";
+import type { AppState, SearchResult } from "../types";
 
 const searchGeocodeEpic: Epic<
   AppAction,

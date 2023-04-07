@@ -1,13 +1,13 @@
 import { Loader } from "@googlemaps/js-api-loader";
 import { CssBaseline } from "@mui/material";
 import { createHashHistory } from "history";
-import { Coordinate } from "ol/coordinate";
+import type { Coordinate } from "ol/coordinate";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import App from "./components/App";
 import { HistoryContext } from "./contexts";
-import { AppStore, createStore } from "./store";
+import { type AppStore, createStore } from "./store";
 import { setCenterCoordinates } from "./store/actions";
 
 const googleApiLoader = new Loader({

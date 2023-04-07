@@ -7,7 +7,7 @@ import {
   alpha,
   styled,
 } from "@mui/material";
-import { FC, FormEvent, useCallback, useRef } from "react";
+import { type FC, type FormEvent, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearSearchError, searchGeocode } from "../../store/actions";
 import { selectIsSearching, selectSearchError } from "../../store/selectors";

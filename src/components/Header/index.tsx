@@ -1,5 +1,5 @@
 import { AppBar, Toolbar, Typography } from "@mui/material";
-import { FC } from "react";
+import type { FC } from "react";
 import AboutButton from "./AboutButton";
 import GeoSearchBox from "./GeoSearchBox";
 

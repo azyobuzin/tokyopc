@@ -1,6 +1,6 @@
 import {
-  Reducer,
-  Store,
+  type Reducer,
+  type Store,
   configureStore,
   createReducer,
 } from "@reduxjs/toolkit";
@@ -8,7 +8,7 @@ import deepEqual from "fast-deep-equal";
 import { createEpicMiddleware } from "redux-observable";
 import { IMPERIAL_COORDINATES } from "../constants";
 import {
-  AppAction,
+  type AppAction,
   beginReverseGeocoding,
   beginSearchGeocode,
   clearAddress,
@@ -18,7 +18,7 @@ import {
   setSearchResult,
 } from "./actions";
 import { rootEpic } from "./epics";
-import { AppState, StoreDependencies } from "./types";
+import type { AppState, StoreDependencies } from "./types";
 
 const initialState: AppState = {
   centerCoordinates: IMPERIAL_COORDINATES,

@@ -11,7 +11,7 @@ import VectorLayer from "ol/layer/Vector";
 import OSM from "ol/source/OSM";
 import VectorSource from "ol/source/Vector";
 import { Fill, RegularShape, Stroke, Style, Text } from "ol/style";
-import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { type FC, useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { IMPERIAL_COORDINATES } from "../constants";
@@ -47,6 +47,7 @@ const AppMap: FC = () => {
     (el: HTMLDivElement | null) => {
       if (el == null) {
         mapRef.current = undefined;
+        setMyLocationButtonEl(null);
         return;
       }
 

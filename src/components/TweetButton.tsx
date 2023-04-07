@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import { FC, useContext } from "react";
+import { type FC, useContext } from "react";
 import { useSelector } from "react-redux";
 import { BASE_URL } from "../constants";
 import { HistoryContext } from "../contexts";

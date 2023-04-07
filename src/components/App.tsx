@@ -1,6 +1,6 @@
 import { Typography, styled } from "@mui/material";
 import { Box } from "@mui/system";
-import { FC } from "react";
+import type { FC } from "react";
 import { useSelector } from "react-redux";
 import { calcPolarCoordinates } from "../logics";
 import { selectAddress, selectCenterCoordinates } from "../store/selectors";
