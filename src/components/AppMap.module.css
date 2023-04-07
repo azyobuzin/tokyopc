@@ -23,3 +23,7 @@
   top: 4em;
   left: 0.5em;
 }
+
+:global(.ol-touch) .myLocationButton {
+  top: 5.5em;
+}
