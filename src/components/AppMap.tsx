@@ -1,4 +1,3 @@
-import MyLocationIcon from "@mui/icons-material/MyLocation";
 import { yellow } from "@mui/material/colors";
 import deepEqual from "fast-deep-equal";
 import { Feature, Map, View } from "ol";
@@ -17,8 +16,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { IMPERIAL_COORDINATES } from "../constants";
 import { setCenterCoordinates } from "../store/actions";
 import { selectCenterCoordinates } from "../store/selectors";
-import "ol/ol.css";
 import classes from "./AppMap.module.css";
+import MyLocationButton from "./MyLocationButton";
+import "ol/ol.css";
 
 const AppMap: FC = () => {
   const mapRef = useRef<Map>();
@@ -153,11 +153,3 @@ const centerMarker = (
     </svg>
   </div>
 );
-
-const MyLocationButton: FC = () => {
-  return (
-    <button title="現在地に移動">
-      <MyLocationIcon fontSize="inherit" />
-    </button>
-  );
-};
