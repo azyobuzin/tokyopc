@@ -26,15 +26,16 @@ const GeoSearchBox: FC = () => {
         dispatch(searchGeocode(query));
       }
     },
-    [dispatch]
+    [dispatch],
   );
 
   const handleSnackbarClose = useCallback(
     () => dispatch(clearSearchError()),
-    [dispatch]
+    [dispatch],
   );
 
   return (
+    // biome-ignore lint/a11y/useSemanticElements: formにrole="search"を指定するのは正しい使い方
     <Search onSubmit={handleSubmit} role="search">
       <SearchIconWrapper>
         {isSearching ? (

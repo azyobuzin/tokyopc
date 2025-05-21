@@ -18,16 +18,21 @@ const history = createHashHistory();
 const store = createStore({ googleApiLoader, history });
 setCenterCoordinatesFromParams(store);
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <CssBaseline />
-    <Provider store={store}>
-      <HistoryContext.Provider value={history}>
-        <App />
-      </HistoryContext.Provider>
-    </Provider>
-  </StrictMode>
-);
+const rootEl = document.getElementById("root");
+if (rootEl) {
+  createRoot(rootEl).render(
+    <StrictMode>
+      <CssBaseline />
+      <Provider store={store}>
+        <HistoryContext.Provider value={history}>
+          <App />
+        </HistoryContext.Provider>
+      </Provider>
+    </StrictMode>,
+  );
+} else {
+  console.error("fatal: root element not found");
+}
 
 function setCenterCoordinatesFromParams(store: AppStore): void {
   const params = new URLSearchParams(history.location.search);

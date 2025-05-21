@@ -23,21 +23,18 @@ ${calcPolarCoordinates(coordinates)}
 `;
 
     const [lng, lat] = coordinates;
-    const permalink =
-      BASE_URL +
-      "/" +
-      history.createHref({
-        pathname: "/",
-        search: new URLSearchParams([
-          ["lng", String(lng)],
-          ["lat", String(lat)],
-        ]).toString(),
-      });
+    const permalink = `${BASE_URL}/${history.createHref({
+      pathname: "/",
+      search: new URLSearchParams([
+        ["lng", String(lng)],
+        ["lat", String(lat)],
+      ]).toString(),
+    })}`;
 
     tweetLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-      tweetBody
+      tweetBody,
     )}&url=${encodeURIComponent(permalink)}&hashtags=${encodeURIComponent(
-      "東京極座標"
+      "東京極座標",
     )}`;
   }
 

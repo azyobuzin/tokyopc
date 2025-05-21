@@ -62,7 +62,7 @@ const reducer = createReducer(initialState, (builder) =>
     })
     .addCase(clearSearchError, (state) => {
       state.searchError = null;
-    })
+    }),
 );
 
 export type AppStore = Store<AppState, AppAction>;

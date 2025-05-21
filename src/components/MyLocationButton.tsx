@@ -25,24 +25,25 @@ const MyLocationButton: FC = () => {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         dispatch(
-          setCenterCoordinates([pos.coords.longitude, pos.coords.latitude])
+          setCenterCoordinates([pos.coords.longitude, pos.coords.latitude]),
         );
         setState({ isBusy: false, error: null });
       },
       (err) => setState({ isBusy: false, error: err.message }),
-      { maximumAge: 5000, timeout: 30000 }
+      { maximumAge: 5000, timeout: 30000 },
     );
   }, [dispatch]);
 
   const handleSnackbarClose = useCallback(
     () => setState((state) => ({ ...state, error: null })),
-    []
+    [],
   );
 
   return (
     <>
       <button
         title="現在地に移動"
+        type="button"
         aria-busy={isBusy}
         disabled={isBusy}
         onClick={handleClick}
@@ -68,7 +69,7 @@ const MyLocationButton: FC = () => {
               {error}
             </Alert>
           </Snackbar>,
-          document.body
+          document.body,
         )}
     </>
   );

@@ -14,12 +14,12 @@ export function calcPolarCoordinates(location: Coordinate): string {
       r *
       Math.acos(
         Math.sin(y1) * Math.sin(y2) +
-          Math.cos(y1) * Math.cos(y2) * Math.cos(deltaX)
+          Math.cos(y1) * Math.cos(y2) * Math.cos(deltaX),
       );
     phi =
       -Math.atan2(
         Math.sin(deltaX),
-        Math.cos(y1) * Math.tan(y2) - Math.sin(y1) * Math.cos(deltaX)
+        Math.cos(y1) * Math.tan(y2) - Math.sin(y1) * Math.cos(deltaX),
       ) +
       Math.PI / 2;
     // -180°～180°に正規化
