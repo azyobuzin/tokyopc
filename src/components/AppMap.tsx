@@ -21,7 +21,7 @@ import MyLocationButton from "./MyLocationButton";
 import "ol/ol.css";
 
 const AppMap: FC = () => {
-  const mapRef = useRef<OLMap>();
+  const mapRef = useRef<OLMap>(undefined);
   const [myLocationButtonEl, setMyLocationButtonEl] =
     useState<HTMLDivElement | null>(null);
   const dispatch = useDispatch();
