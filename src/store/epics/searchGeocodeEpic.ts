@@ -21,9 +21,9 @@ const searchGeocodeEpic: Epic<
       concat(
         of<AppAction>(beginSearchGeocode()),
         (async (): Promise<AppAction> =>
-          setSearchResult(await doSearch(query, googleApiLoader)))()
-      )
-    )
+          setSearchResult(await doSearch(query, googleApiLoader)))(),
+      ),
+    ),
   );
 };
 
@@ -31,7 +31,7 @@ export default searchGeocodeEpic;
 
 async function doSearch(
   query: string,
-  googleApiLoader: Loader
+  googleApiLoader: Loader,
 ): Promise<SearchResult> {
   try {
     const google = await googleApiLoader.load();

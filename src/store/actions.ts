@@ -4,14 +4,14 @@ import type { AddressResult, SearchResult } from "./types";
 
 // createAction の型推論をさせるためにカリー化
 function action<T extends string>(
-  type: T
+  type: T,
 ): { payload: <P>() => PayloadActionCreator<P, T> } {
   return { payload: <P>() => createAction<P, T>(type) };
 }
 
 // 現在の座標を設定する。これをトリガーに住所取得処理が起動する。
 export const setCenterCoordinates = action(
-  "setCenterCoordinates"
+  "setCenterCoordinates",
 ).payload<Coordinate>();
 
 // 取得した住所をセットし、住所取得を完了する。

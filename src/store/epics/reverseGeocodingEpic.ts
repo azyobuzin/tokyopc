@@ -45,11 +45,11 @@ const reverseGeocodingEpic: Epic<
           concat(
             of<AppAction>(beginReverseGeocoding()),
             (async (): Promise<AppAction> =>
-              setAddress(await getAddress(location, googleApiLoader)))()
-          )
-        )
-      )
-    )
+              setAddress(await getAddress(location, googleApiLoader)))(),
+          ),
+        ),
+      ),
+    ),
   );
 
   // 2秒以内に住所を取得できなかったら、住所表示をクリアする
@@ -57,12 +57,12 @@ const reverseGeocodingEpic: Epic<
     map(
       (state) =>
         state.address == null ||
-        deepEqual(state.address.coordinates, state.centerCoordinates)
+        deepEqual(state.address.coordinates, state.centerCoordinates),
     ),
     distinctUntilChanged(),
     switchMap((addressUpToDate) =>
-      addressUpToDate ? EMPTY : timer(2000).pipe(map(() => clearAddress()))
-    )
+      addressUpToDate ? EMPTY : timer(2000).pipe(map(() => clearAddress())),
+    ),
   );
 
   return merge(getAddressPipeline, clearAddressPipeline);
@@ -72,7 +72,7 @@ export default reverseGeocodingEpic;
 
 async function getAddress(
   coordinates: Coordinate,
-  googleApiLoader: Loader
+  googleApiLoader: Loader,
 ): Promise<AddressResult | null> {
   try {
     const google = await googleApiLoader.load();
@@ -110,7 +110,7 @@ const allowedAddressType = new Set([
 ]);
 
 function formatAddress(
-  components: google.maps.GeocoderAddressComponent[]
+  components: google.maps.GeocoderAddressComponent[],
 ): string {
   return components
     .filter(
@@ -123,7 +123,7 @@ function formatAddress(
           x.types.includes("locality") &&
           components[i - 1].types.includes("sublocality_level_1") &&
           x.short_name === components[i - 1].short_name
-        )
+        ),
     )
     .map((x) => x.short_name)
     .reverse()
@@ -132,7 +132,7 @@ function formatAddress(
 
 function updateBrowserLocation(
   [lng, lat]: Coordinate,
-  history: History | undefined
+  history: History | undefined,
 ): void {
   if (!history) return;
   const params = new URLSearchParams(history.location.search);
