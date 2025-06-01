@@ -48,7 +48,7 @@ const AboutButton: FC = () => {
             >
               作者: @azyobuzin
             </Link>
-            {' / '}
+            {" / "}
             <Link
               href="https://github.com/azyobuzin/tokyopc"
               target="_blank"

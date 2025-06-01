@@ -1,20 +1,21 @@
-import { Typography, styled } from "@mui/material";
+import { CircularProgress, Fade, Typography, styled } from "@mui/material";
 import { Box } from "@mui/system";
-import type { FC } from "react";
+import { type FC, Suspense, lazy } from "react";
 import { useSelector } from "react-redux";
 import { calcPolarCoordinates } from "../logics";
 import { selectAddress, selectCenterCoordinates } from "../store/selectors";
-import AppMap from "./AppMap";
 import Header from "./Header";
 import TweetButton from "./TweetButton";
+
+const AppMap = lazy(() => import("./AppMap"));
 
 const App: FC = () => {
   return (
     <AppContainer>
       <Header />
-      <Box height="100%">
+      <Suspense fallback={mapLoading}>
         <AppMap />
-      </Box>
+      </Suspense>
       <Footer />
     </AppContainer>
   );
@@ -29,6 +30,14 @@ const AppContainer = styled("div")({
   overflow: "hidden",
   gridTemplateRows: "auto 1fr auto",
 });
+
+const mapLoading = (
+  <Box height="100%" display="flex" justifyContent="center" alignItems="center">
+    <Fade in={true} style={{ transitionDelay: "1s" }}>
+      <CircularProgress />
+    </Fade>
+  </Box>
+);
 
 const Footer: FC = () => {
   const centerCoordinates = useSelector(selectCenterCoordinates);
