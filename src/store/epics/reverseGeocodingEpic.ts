@@ -75,10 +75,10 @@ async function getAddress(
   googleApiLoader: Loader,
 ): Promise<AddressResult | null> {
   try {
-    const google = await googleApiLoader.load();
+    const { Geocoder } = await googleApiLoader.importLibrary("geocoding")
 
     const result = (
-      await new google.maps.Geocoder().geocode({
+      await new Geocoder().geocode({
         location: { lng: coordinates[0], lat: coordinates[1] },
       })
     ).results[0];

@@ -34,10 +34,10 @@ async function doSearch(
   googleApiLoader: Loader,
 ): Promise<SearchResult> {
   try {
-    const google = await googleApiLoader.load();
+    const { Geocoder } = await googleApiLoader.importLibrary("geocoding")
 
     const results = (
-      await new google.maps.Geocoder().geocode({
+      await new Geocoder().geocode({
         address: query,
         region: "JP",
       })
