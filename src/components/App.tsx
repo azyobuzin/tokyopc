@@ -22,8 +22,8 @@ const App: FC = () => {
           <AppMap />
         </Suspense>
       </AppContainer>
-      <TweetButton />
       <LocationCard />
+      <TweetButton />
     </Box>
   );
 };

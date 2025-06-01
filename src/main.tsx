@@ -1,5 +1,5 @@
 import { Loader } from "@googlemaps/js-api-loader";
-import { CssBaseline } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createHashHistory } from "history";
 import type { Coordinate } from "ol/coordinate";
 import { StrictMode } from "react";
@@ -9,6 +9,7 @@ import App from "./components/App";
 import { HistoryContext } from "./contexts";
 import { type AppStore, createStore } from "./store";
 import { setCenterCoordinates } from "./store/actions";
+import { theme } from "./theme";
 
 const googleApiLoader = new Loader({
   apiKey: import.meta.env.VITE_GOOGLE_API_KEY,
@@ -22,12 +23,14 @@ const rootEl = document.getElementById("root");
 if (rootEl) {
   createRoot(rootEl).render(
     <StrictMode>
-      <CssBaseline />
-      <Provider store={store}>
-        <HistoryContext.Provider value={history}>
-          <App />
-        </HistoryContext.Provider>
-      </Provider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Provider store={store}>
+          <HistoryContext.Provider value={history}>
+            <App />
+          </HistoryContext.Provider>
+        </Provider>
+      </ThemeProvider>
     </StrictMode>,
   );
 } else {
