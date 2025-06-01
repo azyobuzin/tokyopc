@@ -34,7 +34,7 @@ async function doSearch(
   googleApiLoader: Loader,
 ): Promise<SearchResult> {
   try {
-    const { Geocoder } = await googleApiLoader.importLibrary("geocoding")
+    const { Geocoder } = await googleApiLoader.importLibrary("geocoding");
 
     const results = (
       await new Geocoder().geocode({

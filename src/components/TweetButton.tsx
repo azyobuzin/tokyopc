@@ -3,7 +3,7 @@ import { type FC, useContext } from "react";
 import { useSelector } from "react-redux";
 import { BASE_URL } from "../constants";
 import { HistoryContext } from "../contexts";
-import { calcPolarCoordinates } from "../logics";
+import { displayPolarCoordinates } from "../logics";
 import {
   selectAddressPreferUserGiven,
   selectCoordinatesCorrespondingToAddress,
@@ -19,7 +19,7 @@ const TweetButton: FC = () => {
   if (address != null) {
     const tweetBody = `${address}
 ↓ 皇居からの極座標
-${calcPolarCoordinates(coordinates)}
+${displayPolarCoordinates(coordinates)}
 `;
 
     const [lng, lat] = coordinates;

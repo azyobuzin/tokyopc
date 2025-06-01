@@ -2,7 +2,7 @@ import { CircularProgress, Fade, Typography, styled } from "@mui/material";
 import { Box } from "@mui/system";
 import { type FC, Suspense, lazy } from "react";
 import { useSelector } from "react-redux";
-import { calcPolarCoordinates } from "../logics";
+import { displayPolarCoordinates } from "../logics";
 import { selectAddress, selectCenterCoordinates } from "../store/selectors";
 import Header from "./Header";
 import TweetButton from "./TweetButton";
@@ -47,7 +47,7 @@ const Footer: FC = () => {
     <Box display="grid" gridTemplateColumns="1fr 8em" alignItems="end">
       <Box flex={1} padding={2} width="100%" overflow="hidden">
         <Typography variant="h6" noWrap component="div">
-          極座標 {calcPolarCoordinates(centerCoordinates)}
+          極座標 {displayPolarCoordinates(centerCoordinates)}
         </Typography>
         <Typography variant="body2" noWrap component="div">
           {address?.address ?? "住所..."}

@@ -1,14 +1,22 @@
 import type { Coordinate } from "ol/coordinate";
 import { IMPERIAL_COORDINATES } from "./constants";
 
-export function calcPolarCoordinates(location: Coordinate): string {
+export function displayPolarCoordinates(location: Coordinate): string {
+  const coords = calcPolarCoordinates(location);
+  return formatPolarCoordinates(coords);
+}
+
+function calcPolarCoordinates(location: Coordinate): {
+  distance: number;
+  angle: number;
+} {
   // https://keisan.casio.jp/exec/system/1257670779
   const [x1, y1] = IMPERIAL_COORDINATES.map(toRad);
   const [x2, y2] = location.map(toRad);
   let d = 0;
   let phi = 0;
   if (x1 !== x2 && y1 !== y2) {
-    const r = 6378.137;
+    const r = 6378.137; // 地球の半径
     const deltaX = x2 - x1;
     d =
       r *
@@ -25,7 +33,14 @@ export function calcPolarCoordinates(location: Coordinate): string {
     // -180°～180°に正規化
     phi = Math.atan2(Math.sin(phi), Math.cos(phi)) * (180 / Math.PI);
   }
-  return `(${distanceFormat.format(d)}, ${degreeFormat.format(phi)}°)`;
+  return { distance: d, angle: phi };
+}
+
+function formatPolarCoordinates(coords: {
+  distance: number;
+  angle: number;
+}): string {
+  return `(${distanceFormat.format(coords.distance)}, ${angleFormat.format(coords.angle)}°)`;
 }
 
 function toRad(deg: number): number {
@@ -37,7 +52,8 @@ const distanceFormat = new Intl.NumberFormat(undefined, {
   unit: "kilometer",
   maximumSignificantDigits: 3,
 });
-const degreeFormat = new Intl.NumberFormat(undefined, {
+
+const angleFormat = new Intl.NumberFormat(undefined, {
   unit: "degree",
   maximumFractionDigits: 0,
 });
