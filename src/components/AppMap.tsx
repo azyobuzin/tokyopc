@@ -46,6 +46,7 @@ const AppMap: FC = () => {
   const initializeMap = useCallback(
     (el: HTMLDivElement | null) => {
       if (el == null) {
+        mapRef.current?.dispose();
         mapRef.current = undefined;
         setMyLocationButtonEl(null);
         return;
