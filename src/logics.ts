@@ -38,13 +38,27 @@ export function calcPolarCoordinates(location: Coordinate): {
 
 export function getDirectionLabel(angle: number): string {
   // 22.5°ごとに16方向に分割
-  const sectorIndex = Math.floor((((angle + 11.25 + 360) % 360) / 22.5));
-  
+  const sectorIndex = Math.floor(((angle + 11.25 + 360) % 360) / 22.5);
+
   const directionLabels = [
-    '東','東北東','北東','北北東','北','北北西','北西','西北西',
-    '西','西南西','南西','南南西','南','南南東','南東','東南東'
+    "東",
+    "東北東",
+    "北東",
+    "北北東",
+    "北",
+    "北北西",
+    "北西",
+    "西北西",
+    "西",
+    "西南西",
+    "南西",
+    "南南西",
+    "南",
+    "南南東",
+    "南東",
+    "東南東",
   ];
-  
+
   return directionLabels[sectorIndex];
 }
 

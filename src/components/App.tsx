@@ -1,20 +1,30 @@
-import { CircularProgress, Fade, styled } from "@mui/material";
-import { Box } from "@mui/system";
+import { Box, CircularProgress, Fade, styled } from "@mui/material";
 import { type FC, Suspense, lazy } from "react";
 import Header from "./Header";
-import Footer from "./Footer";
+import LocationCard from "./LocationCard";
+import TweetButton from "./TweetButton";
 
 const AppMap = lazy(() => import("./AppMap"));
 
 const App: FC = () => {
   return (
-    <AppContainer>
-      <Header />
-      <Suspense fallback={mapLoading}>
-        <AppMap />
-      </Suspense>
-      <Footer />
-    </AppContainer>
+    <Box
+      sx={{
+        width: "100%",
+        height: "100%",
+        overflow: "hidden",
+        position: "relative",
+      }}
+    >
+      <AppContainer>
+        <Header />
+        <Suspense fallback={mapLoading}>
+          <AppMap />
+        </Suspense>
+      </AppContainer>
+      <TweetButton />
+      <LocationCard />
+    </Box>
   );
 };
 
@@ -25,11 +35,18 @@ const AppContainer = styled("div")({
   width: "100%",
   height: "100%",
   overflow: "hidden",
-  gridTemplateRows: "auto 1fr auto",
+  gridTemplateRows: "auto 1fr",
 });
 
 const mapLoading = (
-  <Box height="100%" display="flex" justifyContent="center" alignItems="center">
+  <Box
+    sx={{
+      height: "100%",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    }}
+  >
     <Fade in={true} style={{ transitionDelay: "1s" }}>
       <CircularProgress />
     </Fade>

@@ -1,4 +1,5 @@
-import { Button } from "@mui/material";
+import XIcon from "@mui/icons-material/X";
+import { Fab } from "@mui/material";
 import { type FC, useContext } from "react";
 import { useSelector } from "react-redux";
 import { BASE_URL } from "../constants";
@@ -37,13 +38,21 @@ const TweetButton: FC = () => {
   }
 
   return (
-    <Button
+    <Fab
+      aria-label="Xでシェア"
+      color="primary"
       disabled={address == null}
       href={tweetLink}
       target="_blank"
+      size="medium"
+      sx={{
+        position: "absolute",
+        bottom: "9rem",
+        right: (theme) => theme.spacing(2),
+      }}
     >
-      ツイート
-    </Button>
+      <XIcon />
+    </Fab>
   );
 };
 
