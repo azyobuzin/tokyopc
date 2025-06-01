@@ -45,9 +45,16 @@ const AboutButton: FC = () => {
               href="https://twitter.com/azyobuzin"
               target="_blank"
               rel="noopener"
-              underline="hover"
             >
               作者: @azyobuzin
+            </Link>
+            {' / '}
+            <Link
+              href="https://github.com/azyobuzin/tokyopc"
+              target="_blank"
+              rel="noopener"
+            >
+              GitHub
             </Link>
           </Typography>
         </DialogContent>
