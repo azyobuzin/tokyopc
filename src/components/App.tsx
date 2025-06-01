@@ -1,11 +1,8 @@
-import { CircularProgress, Fade, Typography, styled } from "@mui/material";
+import { CircularProgress, Fade, styled } from "@mui/material";
 import { Box } from "@mui/system";
 import { type FC, Suspense, lazy } from "react";
-import { useSelector } from "react-redux";
-import { displayPolarCoordinates } from "../logics";
-import { selectAddress, selectCenterCoordinates } from "../store/selectors";
 import Header from "./Header";
-import TweetButton from "./TweetButton";
+import Footer from "./Footer";
 
 const AppMap = lazy(() => import("./AppMap"));
 
@@ -38,24 +35,3 @@ const mapLoading = (
     </Fade>
   </Box>
 );
-
-const Footer: FC = () => {
-  const centerCoordinates = useSelector(selectCenterCoordinates);
-  const address = useSelector(selectAddress);
-
-  return (
-    <Box display="grid" gridTemplateColumns="1fr 8em" alignItems="end">
-      <Box flex={1} padding={2} width="100%" overflow="hidden">
-        <Typography variant="h6" noWrap component="div">
-          極座標 {displayPolarCoordinates(centerCoordinates)}
-        </Typography>
-        <Typography variant="body2" noWrap component="div">
-          {address?.address ?? "住所..."}
-        </Typography>
-      </Box>
-      <Box margin={2}>
-        <TweetButton />
-      </Box>
-    </Box>
-  );
-};

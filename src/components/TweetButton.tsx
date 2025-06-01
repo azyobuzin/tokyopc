@@ -17,9 +17,7 @@ const TweetButton: FC = () => {
   let tweetLink = BASE_URL;
 
   if (address != null) {
-    const tweetBody = `${address}
-↓ 皇居からの極座標
-${displayPolarCoordinates(coordinates)}
+    const tweetBody = `${address} は、${displayPolarCoordinates(coordinates)}
 `;
 
     const [lng, lat] = coordinates;
@@ -40,11 +38,9 @@ ${displayPolarCoordinates(coordinates)}
 
   return (
     <Button
-      variant="contained"
       disabled={address == null}
       href={tweetLink}
       target="_blank"
-      fullWidth
     >
       ツイート
     </Button>

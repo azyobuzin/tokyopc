@@ -6,7 +6,7 @@ export function displayPolarCoordinates(location: Coordinate): string {
   return formatPolarCoordinates(coords);
 }
 
-function calcPolarCoordinates(location: Coordinate): {
+export function calcPolarCoordinates(location: Coordinate): {
   distance: number;
   angle: number;
 } {
@@ -36,24 +36,37 @@ function calcPolarCoordinates(location: Coordinate): {
   return { distance: d, angle: phi };
 }
 
+export function getDirectionLabel(angle: number): string {
+  // 22.5°ごとに16方向に分割
+  const sectorIndex = Math.floor((((angle + 11.25 + 360) % 360) / 22.5));
+  
+  const directionLabels = [
+    '東','東北東','北東','北北東','北','北北西','北西','西北西',
+    '西','西南西','南西','南南西','南','南南東','南東','東南東'
+  ];
+  
+  return directionLabels[sectorIndex];
+}
+
 function formatPolarCoordinates(coords: {
   distance: number;
   angle: number;
 }): string {
-  return `(${distanceFormat.format(coords.distance)}, ${angleFormat.format(coords.angle)}°)`;
+  const direction = getDirectionLabel(coords.angle);
+  return `皇居から ${distanceFormat.format(coords.distance)}, ${angleFormat.format(coords.angle)}° (${direction})`;
 }
 
 function toRad(deg: number): number {
   return (deg * Math.PI) / 180;
 }
 
-const distanceFormat = new Intl.NumberFormat(undefined, {
+export const distanceFormat = new Intl.NumberFormat(undefined, {
   style: "unit",
   unit: "kilometer",
   maximumSignificantDigits: 3,
 });
 
-const angleFormat = new Intl.NumberFormat(undefined, {
+export const angleFormat = new Intl.NumberFormat(undefined, {
   unit: "degree",
   maximumFractionDigits: 0,
 });
